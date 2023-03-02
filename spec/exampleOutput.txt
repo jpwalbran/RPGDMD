@@ -1,0 +1,30 @@
+N1(R[m:<expr><expr>m:<expr>])(m2 m1) {
+    [m1 m3]C[m:<expr>]//[ Description ] 
+    [m2 m3]P[<expr>m:<expr><expr>]
+}
+
+N2(P[m:<expr><expr>])(m3 m1) {
+    N3//<D[m:<expr>m:<expr>]S[P[<expr>]]C[<expr>]>
+    [m1 m1]E[m:<expr>]
+}
+
+N3(P[m:<expr>])(m4 m4) {
+    N2//[ Description ] 
+    [m4 m4]R[m:<expr>]N1//<D[m:<expr>]>//[ Description ] 
+    [m2 m4]P[<expr><expr>m:<expr>]
+}
+
+N2(L[m:<expr>m:<expr><expr>])(m2 m3) {
+    [m4 m4]R[<expr><expr><expr>]N2//[ Description ] 
+}
+
+N1(E[m:<expr>])(m1 m4) {
+    [m4 m3]C[m:<expr>m:<expr><expr>]
+}
+
+N1(P[m:<expr>])(m1 m1) {
+    [m4 m2]C[<expr>]N2//[ Description ] 
+    [m2 m3]P[m:<expr>][m4 m2]L[m:<expr>m:<expr>m:<expr>]//<C[<expr>]D[m:<expr>]m4(R[<expr>])-[C[<expr><expr>]]C[<expr>]-[C[m:<expr>]]>
+} 
+
+pf

@@ -1,0 +1,23 @@
+COMMENT : r'[#].*'
+MATDEF : r'matdef'
+
+MATERIALID : r'\'[A-Z]{1}\'|\.{1}'
+NAME : r'[A-Za-z_-]+[A-Za-z0-9_-]*'
+
+STRING : r'[^\"]*'
+MULTILINESTRING : r'\"\"\"(.|\n)*\"\"\"'
+
+SHAPE : r'[RCELP]{1}'
+
+DESCRIPTIONOP : r'//'
+
+OPENSQUAREBRACKET : r'\['
+CLOSESQUAREBRACKET : r'\]'
+
+OPENCURLYBRACKET : r'\{'
+CLOSECURLYBRACKET : r'\}'
+
+OPENPAREN : r'\('
+CLOSEPAREN : r'\)'
+
+NUMBER : r'[0-9]+'

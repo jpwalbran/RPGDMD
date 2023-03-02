@@ -1,0 +1,41 @@
+# Just a character
+Material: [a-zA-z] 
+
+# Describes the keyword 'matdef'
+Material definition: matdef 
+
+# Describes a material definition (a word), ideally only captures the first group, not the quotes
+MaterialName: "([A-Za-z]+)"
+
+# Denotes a comment (ignored by compiler)
+Comment: #.*
+
+# Denotes a description (string literal)
+Description: "[^"]*"
+
+# Denotes a multiline string literal
+MultiLineString: """(.|\n)*"""
+
+# Denotes a shape identifier
+Shape: [RCELP]{1}
+
+# Finds a description amendment operator ('//')
+DescriptionSeparator: \/\/
+
+# Find a left square bracket '['
+OpenSquareBracket: \[
+
+# Find a right square bracket ']'
+CloseSquareBracket: \]
+
+# Find a left '('
+OpenBracket: \(
+
+# Find a right ')'
+CloseBracket: \)
+
+# Find a left '{'
+OpenCurlyBracket: {
+
+# Find a right '}'
+CloseCurlyBracket: }

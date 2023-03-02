@@ -1,0 +1,79 @@
+<start> ::= <TS>{1} ;
+
+# Defines the top level of the grammar
+# This ensures that "matdef" is only at the top
+<TS> ::= <matdeflist> <S> | <S> ;
+ 
+# Defines a list of material definitions
+<matdeflist> ::= <matdeflist> <matdef> | <matdef> ;
+
+#Defines a material definition (TSG)
+<matdef> ::= " matdef " ;
+
+#Defines the start options
+<S> ::= <FS> <S> | <FS> | <S> <pf> | <pf> ;
+
+# Defines a print statement (TSG)
+<pf> ::= " pf " ;
+
+# Defines a floor association
+<FS> ::= <FS> <F> | <F> ;
+
+# Describes a floor initialization
+<F> ::= <name> "(" <Sopt> ")(" <mat> " " <mat> "){" <Fi> "}" ;
+
+<Fi> ::= <Fi> <Rdef> | <Fi> <name>"//"<rammends> | <Rdef> | <name>"//"<rammends> ;
+
+# Defines a room definition
+<Rdef> ::= <R>"//"<rammends> | <R> ;
+
+# Defines a Room initialization
+<R> ::= "[" <mat> " " <mat> "]" <Sopt> ;
+
+# Defines room ammendments
+<rammends> ::= <featurelist>"//"<descr> | <featurelist> | <descr>  ;
+
+# Describes a feature list
+<featurelist> ::= "<" <FL> ">" ;
+
+# Describes a set of features
+<FL> ::= <FL> <feature> | <feature> ;
+
+#Describes a feature 
+<feature> ::= "D"<paramlist> | <mat>"(" <Sopt> ")" | <Sopt> | <featopt> "[" <Sopt> "]" ;
+
+# Describes the special options for features
+<featopt> ::= "H" | "-" | "S" ;
+
+# Describes a name (TSG)
+<name> ::= "N1" | "N2" | "N3" ;
+
+# Describes a material (TSG)
+<mat> ::= "m1" | "m2" | "m3" | "m4";
+
+# Describes shape options
+<Sopt> ::= <shape> <paramlist> ;
+
+# Describes a shape
+<shape> ::= "R" | "C" | "E" | "L" | "P" ;
+
+# Describes a description (TSG)
+<descr> ::= "[ Description ] " ;
+
+# Describe a parameter list
+<paramlist> ::= "[" <PL> "]" ;
+
+# Describes a sequence of parameters
+<PL> ::= <PL> <param> | <param> ;
+
+# Describes a parameter
+<param> ::= "m:"<expr> | <expr> ;
+
+# Denotes a mathematical expression (TSG)
+<expr> ::= <term> | <expr> "+" <term> | <expr> "-" <term> ;
+
+<term> ::= <factor> | <term> "*" <factor> | <term> "/" <factor> ;
+
+<factor> ::= <var> | "(" <expr> ")" | "-"<factor> ;
+
+<var> ::= "a" | "b" | "x" | "y" | "z" ;

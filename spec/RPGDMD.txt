@@ -1,0 +1,100 @@
+RPGDMD: Role-Playing-Game Dungeon Markdown
+
+Make a DSL for generating Dungeon maps based on room and feature data
+This would be an interpreted, loosely typed, imperative language,
+often run in a REPL setting.
+
+Coordinate space: 
+    +x -> Left-to-Right
+    +y -> Top-to-Bottom
+    (0,0) (1,0) (2,0) . . . +x
+    (0,1) (1,1) (2,1)
+    (0,2) (1,2) (2,2)
+    .
+    .
+    .
+    +y
+
+Spec: 
+	- Any input that can be a number can also support standard mathematical expressions, with the '+', '-', '*', '/', and '^' (exponentiation) operators, and any normal parenthetical grouping.
+
+	- Since all collections are all character terminated, commas aren't used, instead different values are space separated. 
+
+	- [w:<mat> f:<mat>]<shape>[<params>] creates a room with a shape of <shape> and the parameters <params>, as defined for the given shapes. 
+		Additionally, sets the wall material to the input <mat>, and the floor to the second <mat>. '.' can be put in place of them to represent default material.
+	
+	- <Room>//<text> adds a text description for a room
+
+	- <mat>() wraps the contents of a room feature of material '<mat>', features can be such things as added shapes in different materials, or add connections to other floors
+
+	- <Room>//(<feature>) appends a feature to the room, often a shape
+
+	- ()//<text> adds a text description to a feature
+
+	- <> denotes a list, often of features
+
+	- <Name> (<shape> [params])(<mat> <mat>){...} Creates a floor with name <name>, and shape <shape>, and the dimension parameters for that shape (a collection of rooms, and the entirety of what gets rendered in one "pf" call) The 'f' parameter represents the default floor material, represented with a '.' in the text rendering, and the 'w' parameter represents the default wall material, represented with a '#' in the text rendering.
+	
+	- '#' denotes comments (removed in a temporary copy of the file in the runtime)
+	
+	#These will instead be set within the command line flags, rather than in the script.
+	- pf[<floor> | <room> desc:<True/False>=True] prints a map of the input floor or room, with the optional 'desc' parameter for printing the descriptions of each room, or not (defaults to True)
+	- pd[<floor> | <room>] prints the description of a floor or room.
+	- save[<floor> | <room> <path> desc?:<T/F>=T mode?:<"txt"|"img">="txt"] saves the output of a room or floor to a file, either rendered as text, or into an image file with attached text.
+
+<shapes>:
+	- R : Rectangle [x y w h m?:<"bl"|"br"|"tl"|"tr"|"cx"|"cy"|"c">="tl"] denotes a rectangle with a starting position (x, y), with a width w and a height of h. The mode parameter m? represents the draw mode, specifically for the position of (x,y).
+			bl: (x,y) is the bottom left corner of the rectangle.
+			br: (x,y) is the bottom right corner of the rectangle.
+			tl: (x,y) is the top left corner of the rectangle. (default)
+			tr: (x,y) is the top right corner of the rectangle.
+			cx: (x,y) is centered along the x-axis, and aligned along the top of y. 
+			cy: (x,y) is centered along the y-axis, and aligned along the left of x.
+			 c: (x,y) is the center of the rectangle.
+
+	- C : Circle [cx cy r] denotes a circle with a center (cx, cy) with a radius r.
+	
+	- E : Ellipse [cx cy a b] denotes an ellipse with a center (cx, cy) with x-radius a and y-radius b.
+	
+	- L : Line [x1 y1 x2 y2] denotes a line from (x1, y1) to (x2, y2).
+	
+	- P : Polygon [x1 y1 x2 y2 x3 y3 ... xa yn inv?:<True|False>=False] Constructs an arbitrary polygon with vertices 
+	{(x1, y1), (x2, y2), ..., (xa, ya)}, with the last edge closing to (x1, y1). This will be filled with a scan-fill algorithm. The inv? parameter determines whether to invert the polygon fill, or not. (If the flip is true, then the polygon acts sort of as a hole shape.)
+
+<mat>: Denotes a material that could show up in a map, and the character display
+	- the default wall material displays as '#', and the default floor material displays as '.', regardless of their material.
+
+	- default materials: {'l': "lava" 'w': "water" 'd': "dirt" 's': 'stone' 'g': "grass" 'v': "void"}
+	
+	- custom materials can be defined with the following syntax:
+		matdef <mat-name> '<mat-char>' where the <mat-name> is the display text of the material, and the <mat-char> is the character reference to the material. The <mat-char> is what gets referenced in other statements (for example, within a feature), while <mat-name> is what is referenced in the auto-generated descriptions.
+
+Room Features: (probably an incomplete list) These are materials or other structures that are only applicable to be added 
+	within a room, and cannot create a room or large itself.
+
+	X<mat>X : denotes a door of a given material, when displayed vertically, shows up as 
+		X
+	  <mat>
+		X 
+
+		Doors are special because doors can't be non-linear. Therefore, adding a door has a special syntax
+		The feature command for adding a door is:
+			(D[<mat> x y l <"H"|"V">]) 
+			where <mat> is the door's material, x y represents the starting point of the door, l is the length of the door, and the "H"|"V" is an ENUM for determining whether the door is x-aligned (H) or y-aligned (V). Since a door is a feature to the room, it gets wrapped in '()'.
+
+	'S' : denotes a ground mounted spikes, often put at the bottom of a pit
+
+	'H' : denotes a ladder up or down, goes between layers, needs a connector reference
+
+	'-' : refers to stairs up or down, goes between layers, needs a connector reference.
+
+Connecting Floors:
+Two floors can be connected in a few ways:
+	- Through ladders or stair features, which have a connection parameter to another floor's room
+	- Through a floor-transition room. These are special rooms that connect between two different floors. 
+		The definition here requires that you specify which floor they connect to, and what room in that floor they connect to.
+		The syntax for that is: 
+			(<feature> -> <floor>.<room>)
+			Which would have to be in both components (if there are multiple possible connectors in the destination room), to handle rooms with multiple connections.
+		Those two rooms, unless connected by stairs or a ladder (or another similar feature, maybe portals?) Need to have a special connector feature
+		to define where the connections occur.
