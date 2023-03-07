@@ -14,3 +14,8 @@ TestFloor (R[0 0 30 30])('s' 's') {
 		This is mostly to have a test source for regex building.
 		"""
 }
+
+TestFloor2 (C[0 0 15])('s' 's') {
+	# Make another area
+	r2 = [. .]R[20 0 5 10]//"A small circular room in the floor."
+}

@@ -28,7 +28,7 @@
 <Rdef> ::= <R>"//"<rammends> | <R> ;
 
 # Defines a Room initialization
-<R> ::= "[" <mat> " " <mat> "]" <Sopt> ;
+<R> ::= "[" <mat> " " <mat> "]" <Sopt> | <name> "="  "[" <mat> " " <mat> "]" <Sopt>;
 
 # Defines room ammendments
 <rammends> ::= <featurelist>"//"<descr> | <featurelist> | <descr>  ;

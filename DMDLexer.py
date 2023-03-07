@@ -13,9 +13,9 @@ class DMDLexer(Lexer):
         NUMBER,
         MATDEF,
         DESCROP,
-        DIV,
         MODEPARAM,
-        MODE
+        MODE,
+        FEATOPT
     }
 
 
@@ -32,10 +32,10 @@ class DMDLexer(Lexer):
     ignore_comment = r'[#].*'
 
     # Define the literals/keywords
-    literals = {"+", "-", "*", "^", "(", ")", "[", "]", "{", "}", "=", "<", ">"}
+    literals = {"+", "-", "*", "^", "(", ")", "[", "]", "{", "}", "=", "<", ">", "w", "h", "/"}
 
     # Shape definitions come at the top
-    SHAPE = r'[RCELP]'
+    SHAPE = r'[RCELP]{1}'
     MATERIALID = r'\'[A-Za-z]{1}\'|\.{1}'
 
      # Handle the mode parameters
@@ -47,7 +47,7 @@ class DMDLexer(Lexer):
     
     DESCROP = r'\/\/'
 
-    DIV = r'\/'
+    FEATOPT = r'[DHS-]{1}'
 
     # Handle String literals
     MULTILINESTRING = r'\"\"\"(.|\n)*\"\"\"'
