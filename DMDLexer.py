@@ -14,7 +14,6 @@ class DMDLexer(Lexer):
         MATDEF,
         DESCROP,
         MODEPARAM,
-        MODE,
         FEATOPT
     }
 
@@ -52,9 +51,6 @@ class DMDLexer(Lexer):
     # Handle String literals
     MULTILINESTRING = r'\"\"\"(.|\n)*\"\"\"'
     STRING = r'\"[^\"]*\"'
-
-    # Handle rectangle modes
-    MODE = r'\'(c|bl|br|tl|tr|cx|cy)\''
     
     # Handle bracket nesting
     

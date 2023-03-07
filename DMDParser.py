@@ -51,7 +51,7 @@ class DMDParser(Parser):
         return Material(p.STRING, p.MATERIALID)
     
     # Defines the options for the overall file structure
-    @_('s fs')
+    @_('fs s')
     def s(self, p):
         return (p.fs, p.s)
     
@@ -98,6 +98,10 @@ class DMDParser(Parser):
     @_('"[" MATERIALID MATERIALID "]" sopt')
     def r(self, p):
         return (p.MATERIALID0, p.MATERIALID1, p.sopt)
+    
+    @_('NAME "=" "[" MATERIALID MATERIALID "]" sopt')
+    def r(self, p):
+        return (p.NAME, p.MATERIALID0, p.MATERIALID1, p.sopt)
     
     @_('featurelist DESCROP descr')
     def rammends(self, p):
@@ -163,9 +167,9 @@ class DMDParser(Parser):
     def pl(self, p):
         return p.param
     
-    @_('MODEPARAM MODE')
+    @_('MODEPARAM STRING')
     def param(self, p):
-        return (p.MODEPARAM, p.MODE)
+        return (p.MODEPARAM, p.STRING)
     
     @_('expr')
     def param(self, p):
@@ -217,7 +221,7 @@ class DMDParser(Parser):
     
     def error(self, p):
         if p:
-            print(f"Syntax error at token {p.type} on line {p.lineno}")
+            print(f"Syntax error at token {p.type} on line {p.lineno} at index {p.index}")
             self.errok()
         else:
             print("Unexpected EOF encountered.")
@@ -228,6 +232,5 @@ if __name__ == "__main__":
     lexer = DMDLexer()
     parser = DMDParser()
     with open("exampleIn.txt") as f:
-        data = "".join([x for x in f.readlines()])
-    #print(data)
+        data = f.read()
     parser.parse(lexer.tokenize(data))

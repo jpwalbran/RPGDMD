@@ -6,7 +6,7 @@ matdef "Goop" 'g'
 
 TestFloor (R[0 0 30 30])('s' 's') {
 	# Make an entryway with a puddle of goop in the middle.
-	r1 = [. .]R[15 0 5 10 m:'c']//"A small stone entryway with a puddle of green goop in the middle of the floor."
+	r1 = [. .]R[15 0 5 10 m:"c"]//"A small stone entryway with a puddle of green goop in the middle of the floor."
 	r1//<('g'C[3 * w / 4 h / 2 2]//"A small circular puddle of green goop.") ('g'C[w / 4 2 * h / 3 1]//"A small circular puddle of green goop.")>
 
 	r2 = [. .]R[10 0 15 15]//""" 
