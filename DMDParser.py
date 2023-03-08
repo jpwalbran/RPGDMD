@@ -67,7 +67,7 @@ class DMDParser(Parser):
     def fs(self, p):
         return p.f
     
-    @_('NAME "(" sopt ")" "(" MATERIALID MATERIALID ")" "{" fi "}" ')
+    @_('NAME LPAREN sopt RPAREN LPAREN MATERIALID MATERIALID RPAREN LCBRACE fi RCBRACE ')
     def f(self, p):
         return (p.NAME, p.sopt, p.MATERIALID0, p.MATERIALID1, p.fi)
     
@@ -95,11 +95,11 @@ class DMDParser(Parser):
     def rdef(self, p):
         return (p.r, p.rammends)
 
-    @_('"[" MATERIALID MATERIALID "]" sopt')
+    @_('LSBRACE MATERIALID MATERIALID RSBRACE sopt')
     def r(self, p):
         return (p.MATERIALID0, p.MATERIALID1, p.sopt)
     
-    @_('NAME "=" "[" MATERIALID MATERIALID "]" sopt')
+    @_('NAME EQ LSBRACE MATERIALID MATERIALID RSBRACE sopt')
     def r(self, p):
         return (p.NAME, p.MATERIALID0, p.MATERIALID1, p.sopt)
     
@@ -115,7 +115,7 @@ class DMDParser(Parser):
     def rammends(self, p):
         return p.descr
     
-    @_('"<" fl ">"')
+    @_('LNGBRACE fl RNGBRACE')
     def featurelist(self, p):
         return p.fl
     
@@ -131,7 +131,7 @@ class DMDParser(Parser):
     def feature(self, p):
         return ("D", p.paramlist)
     
-    @_('MATERIALID "(" sopt ")"')
+    @_('MATERIALID LPAREN sopt RPAREN')
     def feature(self, p):
         return (p.MATERIALID, p.sopt)
     
@@ -139,7 +139,7 @@ class DMDParser(Parser):
     def feature(self, p):
         return p.sopt
     
-    @_('FEATOPT "[" sopt "]"')
+    @_('FEATOPT LSBRACE sopt RSBRACE')
     def feature(self, p):
         return (p.FEATOPT, p.sopt)
     
@@ -155,7 +155,7 @@ class DMDParser(Parser):
     def descr(self, p):
         return p.MULTILINESTRING
 
-    @_('"[" pl "]"')
+    @_('LSBRACE pl RSBRACE')
     def paramlist(self, p):
         return p.pl
     
@@ -179,11 +179,11 @@ class DMDParser(Parser):
     def expr(self, p):
         return p.term
     
-    @_('expr "+" term')
+    @_('expr PLUS term')
     def expr(self, p):
         return ('+' ,p.expr, p.term)
     
-    @_('expr "-" term')
+    @_('expr MINUS term')
     def expr(self, p):
         return ('-', p.expr, p.term)
     
@@ -191,19 +191,19 @@ class DMDParser(Parser):
     def term(self, p):
         return p.factor
     
-    @_('term "*" factor')
+    @_('term TIMES factor')
     def term(self, p):
         return ('*', p.term, p.factor)
     
-    @_('term "/" factor')
+    @_('term DIV factor')
     def term(self, p):
         return ('/', p.term , p.factor)
     
-    @_('"(" expr ")"')
+    @_('LPAREN expr RPAREN')
     def factor(self, p):
         return p.expr
 
-    @_('"-" factor')
+    @_('MINUS factor')
     def factor(self, p):
         return ('-', p.factor)
     
@@ -218,7 +218,7 @@ class DMDParser(Parser):
     @_('"h"')
     def factor(self, p):
         return "h"
-    
+
     def error(self, p):
         if p:
             print(f"Syntax error at token {p.type} on line {p.lineno} at index {p.index}")
@@ -226,11 +226,10 @@ class DMDParser(Parser):
         else:
             print("Unexpected EOF encountered.")
 
-    
-
 if __name__ == "__main__":
     lexer = DMDLexer()
     parser = DMDParser()
     with open("exampleIn.txt") as f:
         data = f.read()
-    parser.parse(lexer.tokenize(data))
+    output = parser.parse(lexer.tokenize(data))
+    print(output)

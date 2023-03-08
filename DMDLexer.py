@@ -14,7 +14,21 @@ class DMDLexer(Lexer):
         MATDEF,
         DESCROP,
         MODEPARAM,
-        FEATOPT
+        FEATOPT,
+        LPAREN,
+        RPAREN,
+        LCBRACE,
+        RCBRACE,
+        LNGBRACE,
+        RNGBRACE,
+        LSBRACE,
+        RSBRACE,
+        MINUS,
+        PLUS,
+        DIV,
+        TIMES,
+        EXP,
+        EQ
     }
 
 
@@ -27,17 +41,16 @@ class DMDLexer(Lexer):
     # Ignore whitespace between tokens
     ignore = ' \t'
     
-    # Ignore comments
     ignore_comment = r'[#].*'
 
-    # Define the literals/keywords
-    literals = {"+", "-", "*", "^", "(", ")", "[", "]", "{", "}", "=", "<", ">", "w", "h", "/"}
+    # Define the literals
+    literals = {"w", "h"}
 
     # Shape definitions come at the top
     SHAPE = r'[RCELP]{1}'
     MATERIALID = r'\'[A-Za-z]{1}\'|\.{1}'
 
-     # Handle the mode parameters
+    # Handle the mode parameters
     MODEPARAM = r'[A-Za-z]+:'
 
     # Handle names/identifiers
@@ -52,66 +65,35 @@ class DMDLexer(Lexer):
     MULTILINESTRING = r'\"\"\"(.|\n)*\"\"\"'
     STRING = r'\"[^\"]*\"'
     
-    # Handle bracket nesting
-    
     # Curly brackets
-    @_(r'\{')
-    def LCBRACE(self, t):
-        t.type = '{'
-        self.CNestingLevel += 1
-        return t
-    
-    @_(r'\}')
-    def RCBRACE(self, t):
-        t.type = '}'
-        self.CNestingLevel -= 1
-        return t
-    
-    # Square Brackets
-    @_(r'\[')
-    def LSBRACE(self, t):
-        t.type = '['
-        self.SNestingLevel += 1
-        return t
+    LCBRACE = r'\{'
+    RCBRACE = r'\}'
 
-    @_(r'\]')
-    def RSBRACE(self, t):
-        t.type = ']'
-        self.SNestingLevel -= 1
-        return t
+    # Square Brackets
+    LSBRACE = r'\['
+    RSBRACE = r'\]'
 
     # Parentheses
-    @_(r'\(')
-    def LBRACE(self, t):
-        t.type = '('
-        self.NestingLevel += 1
-        return t
-    
-    @_(r'\)')
-    def RBRACE(self, t):
-        t.type = ')'
-        self.NestingLevel -= 1
-        return t
+    LPAREN = r'\('
+    RPAREN = r'\)'
 
     # Angle Brackets
-    @_(r'\<')
-    def LNGBRACE(self, t):
-        t.type = "<"
-        self.NGNestingLevel += 1
-        return t
+    LNGBRACE = r'\<'
+    RNGBRACE = r'\>'
     
-    @_(r'\>')
-    def RNGBRACE(self, t):
-        t.type = ">"
-        self.NGNestingLevel -= 1
-        return t
+    PLUS = r'\+'
+    MINUS = r'\-'
+    TIMES = r'\*'
+    DIV = r'\/'
+    EXP = r'\^'
+    EQ = r'='
 
     # Convert all numbers to ints
     @_(r'[0-9]+')
     def NUMBER(self, t):
         t.value = int(t.value)
         return t
-
+    
     # Keep a line count
     @_(r'\n+')
     def newline(self, t):
