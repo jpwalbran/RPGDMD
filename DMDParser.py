@@ -27,15 +27,15 @@ class DMDParser(Parser):
 
         # Keeps a list of floors, each containing rooms
         self.floors = {}
-
-    @_('s')
-    def ts(self, p):
-        return p.s
     
     # Parse material definitions
     @_('matdeflist s')
     def ts(self, p):
         return (p.matdeflist, p.s)
+    
+    @_('s')
+    def ts(self, p):
+        return p.s
     
     @_('matdeflist matdef')
     def matdeflist(self, p):
@@ -67,7 +67,7 @@ class DMDParser(Parser):
     def fs(self, p):
         return p.f
     
-    @_('NAME LPAREN sopt RPAREN LPAREN MATERIALID MATERIALID RPAREN LCBRACE fi RCBRACE ')
+    @_('NAME LPAREN sopt RPAREN LPAREN MATERIALID MATERIALID RPAREN LCBRACE fi RCBRACE')
     def f(self, p):
         return (p.NAME, p.sopt, p.MATERIALID0, p.MATERIALID1, p.fi)
     
@@ -218,7 +218,7 @@ class DMDParser(Parser):
     @_('"h"')
     def factor(self, p):
         return "h"
-
+    
     def error(self, p):
         if p:
             print(f"Syntax error at token {p.type} on line {p.lineno} at index {p.index}")

@@ -4,5 +4,8 @@ class Material(object):
         self.name = name
         self.id = id
     
+    def __repr__(self):
+        return self.__str__()
+
     def __str__(self):
-        print(f"<MAT>: ({self.name}, '{self.id})'")
+        return f"<MAT>: ({self.name}, '{self.id})'"
