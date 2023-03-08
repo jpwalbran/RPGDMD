@@ -31,13 +31,16 @@
 <R> ::= "[" <mat> " " <mat> "]" <Sopt> | <name> "="  "[" <mat> " " <mat> "]" <Sopt>;
 
 # Defines room ammendments
-<rammends> ::= <featurelist>"//"<descr> | <featurelist> | <descr>  ;
+<rammends> ::= <featurelist>"//"<descr> | <featurelist> | <descr> | <feature> ;
 
 # Describes a feature list
 <featurelist> ::= "<" <FL> ">" ;
 
 # Describes a set of features
-<FL> ::= <FL> <feature> | <feature> ;
+<FL> ::= <FL> <ft> | <ft> ;
+
+# Denotes that features are wrapped in parens.
+<ft> ::= "(" <feature> ")" ;
 
 #Describes a feature 
 <feature> ::= "D"<paramlist> | <mat>"(" <Sopt> ")" | <Sopt> | <featopt> "[" <Sopt> "]" ;

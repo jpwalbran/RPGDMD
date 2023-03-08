@@ -119,12 +119,16 @@ class DMDParser(Parser):
     def featurelist(self, p):
         return p.fl
     
-    @_('fl feature')
+    @_('fl ft')
     def fl(self, p):
-        return (p.fl, p.feature)
+        return (p.fl, p.ft)
     
-    @_('feature')
+    @_('ft')
     def fl(self, p):
+        return p.ft
+    
+    @_('LPAREN feature RPAREN')
+    def ft(self, p):
         return p.feature
     
     @_('"D" paramlist')
