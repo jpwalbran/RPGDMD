@@ -8,7 +8,6 @@ class DMDParser(Parser):
     debugfile = 'parser.out'
     start = 'ts'
 
-    # Include a list of always given materials
     DEFAULT_MATERIALS = [
         Material('l', 'lava'), 
         Material('w','water'), 
@@ -18,17 +17,12 @@ class DMDParser(Parser):
         Material('v', 'void')
         ]
 
-    # Get the token list from the Lexer
     tokens = DMDLexer.tokens
 
     def __init__(self):
-        # Run a list of materials defined in the file
         self.new_materials = []
-
-        # Keeps a list of floors, each containing rooms
         self.floors = {}
     
-    # Parse material definitions
     @_('matdeflist s')
     def ts(self, p):
         return (p.matdeflist, p.s)
@@ -50,7 +44,6 @@ class DMDParser(Parser):
     def matdef(self, p):
         return Material(p.STRING, p.MATERIALID)
     
-    # Defines the options for the overall file structure
     @_('fs s')
     def s(self, p):
         return (p.fs, p.s)
@@ -229,7 +222,7 @@ class DMDParser(Parser):
     
     def error(self, p):
         if p:
-            print(f"Syntax error at token {p.type} on line {p.lineno} at index {p.index}")
+            print(f"Syntax error at token {p.type} on line {p.lineno}")
             self.errok()
         else:
             print("Unexpected EOF encountered.")
