@@ -103,3 +103,37 @@ class TestDMDLexer(object):
 
         self.checkToken(tokenList[0], "LSBRACE", "[")
         self.checkToken(tokenList[1], "RSBRACE", "]")
+    
+    def test_legal_names(self):
+        names = ["r1", "r2", "r3", "_Underscores_", "Apple", "Foo"]
+        tokenList = self.getTokenList("".join(x + " " for x in names))
+        assert len(tokenList) == 6
+
+        for i,t in enumerate(tokenList):
+            self.checkToken(t, "NAME", names[i])
+    
+    def test_width_and_height(self):
+        tokenList = self.getTokenList("w h")
+        assert len(tokenList) == 2
+
+        self.checkToken(tokenList[0], "WIDTH", "w")
+        self.checkToken(tokenList[1], "HEIGHT", "h")
+    
+    def test_shapes(self):
+        tokenList = self.getTokenList("R C E L P")
+        assert len(tokenList) == 5
+
+        for t in tokenList:
+            assert t.type == "SHAPE"
+    
+    def test_material_id(self):
+        tokenList = self.getTokenList("'g' 'w' 's' 'l'")
+        assert len(tokenList) == 4
+
+        for t in tokenList:
+            assert t.type == "MATERIALID"
+        
+    def test_description_operator(self):
+        tokenList = self.getTokenList("//")
+        assert len(tokenList) == 1
+        assert tokenList[0].type == "DESCROP"
