@@ -1,6 +1,7 @@
 from sly import Parser
 from DMDLexer import DMDLexer
 from Material import Material
+import pprint
 
 
 class DMDParser(Parser):
@@ -230,7 +231,8 @@ class DMDParser(Parser):
 if __name__ == "__main__":
     lexer = DMDLexer()
     parser = DMDParser()
-    with open("exampleIn.txt") as f:
+    pp = pprint.PrettyPrinter(indent=2)
+    with open("testCases/exampleIn.txt") as f:
         data = f.read()
     output = parser.parse(lexer.tokenize(data))
-    print(output)
+    pp.pprint(output)
