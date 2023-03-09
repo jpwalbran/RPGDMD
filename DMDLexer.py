@@ -28,7 +28,9 @@ class DMDLexer(Lexer):
         DIV,
         TIMES,
         EXP,
-        EQ
+        EQ,
+        HEIGHT,
+        WIDTH
     }
 
 
@@ -43,9 +45,6 @@ class DMDLexer(Lexer):
     
     ignore_comment = r'[#].*'
 
-    # Define the literals
-    literals = {"w", "h"}
-
     # Shape definitions come at the top
     SHAPE = r'[RCELP]{1}'
     MATERIALID = r'\'[A-Za-z]{1}\'|\.{1}'
@@ -56,7 +55,9 @@ class DMDLexer(Lexer):
     # Handle names/identifiers
     NAME = r'[A-Za-z_-]+[A-Za-z0-9_-]*'
     NAME['matdef'] = MATDEF
-    
+    NAME['w'] = WIDTH
+    NAME['h'] = HEIGHT
+     
     DESCROP = r'\/\/'
 
     FEATOPT = r'[DHS-]{1}'

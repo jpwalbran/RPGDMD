@@ -131,11 +131,15 @@ class DMDParser(Parser):
     def ft(self, p):
         return p.feature
     
+    @_('LPAREN feature DESCROP descr RPAREN')
+    def ft(self, p):
+        return (p.feature, p.descr)
+    
     @_('"D" paramlist')
     def feature(self, p):
         return ("D", p.paramlist)
     
-    @_('MATERIALID LPAREN sopt RPAREN')
+    @_('MATERIALID sopt')
     def feature(self, p):
         return (p.MATERIALID, p.sopt)
     
@@ -215,13 +219,13 @@ class DMDParser(Parser):
     def factor(self, p):
         return p.NUMBER
     
-    @_('"w"')
+    @_('WIDTH')
     def factor(self, p):
-        return "w"
+        return p.WIDTH
     
-    @_('"h"')
+    @_('HEIGHT')
     def factor(self, p):
-        return "h"
+        return p.HEIGHT
     
     def error(self, p):
         if p:

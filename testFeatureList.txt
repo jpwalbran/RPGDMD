@@ -1,0 +1,5 @@
+TestFloor (R[0 0 30 30])('s' 's') {
+	r1 // <
+    ('g' C[3 * w / 4 h / 2 2]//"A small circular puddle of green goop.") 
+    ('g' C[w / 4 2 * h / 3 1]//"A small circular puddle of green goop.")>
+}
