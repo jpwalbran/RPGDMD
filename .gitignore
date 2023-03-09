@@ -131,3 +131,4 @@ spec/.DS_Store
 .DS_Store
 parser.out
 Lexerout.txt
+parserOutput.txt

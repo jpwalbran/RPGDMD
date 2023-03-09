@@ -1,6 +1,6 @@
 from sly import Parser
 from DMDLexer import DMDLexer
-from src.RPGDMD.Material import Material
+from Material import Material
 
 
 class DMDParser(Parser):
