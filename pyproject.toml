@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "RPGDMD"
+version = "0.0.1"
+authors = [
+  { name="John Walbran", email="jpwalbran@gmail.com" },
+]
+description = "A lightweight markdown language for defining dungeons for role playing games."
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "attrs==22.2.0",
+    "exceptiongroup==1.1.0",
+    "iniconfig==2.0.0",
+    "packaging==23.0",
+    "pluggy==1.0.0",
+    "pytest==7.2.2",
+    "sly==0.5",
+    "tomli==2.0.1"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/jpwalbran/RPGDMD"
+"Bug Tracker" = "https://github.com/jpwalbran/RPGDMD/issues"

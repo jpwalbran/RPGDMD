@@ -1,7 +1,9 @@
-from unittest import TestCase
+import pytest
+from src.RPGDMD.DMDLexer import DMDLexer
 
-class TestDMDLexer(TestCase):
+class TestDMDLexer(object):
 
     def test_always_pass(self):
-        assert True
+        self.lexer = DMDLexer()
+        assert len(self.lexer.tokenize("matdef")) == 1
     
