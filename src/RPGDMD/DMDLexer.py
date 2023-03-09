@@ -33,13 +33,6 @@ class DMDLexer(Lexer):
         WIDTH
     }
 
-
-    def __init__(self):
-        self.CNestingLevel = 0
-        self.SNestingLevel = 0
-        self.NestingLevel = 0
-        self.NGNestingLevel = 0
-
     # Ignore whitespace between tokens
     ignore = ' \t'
     
