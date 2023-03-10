@@ -108,3 +108,10 @@ class TestDMDParser(object):
         """
         tree = self.parse(command)
         assert len(tree) > 0
+    
+    def test_floor_with_expression(self):
+        command = """
+            f1 (R[4 + 2 3 * 4 7 / 8 4 ^ 2])('s' 's') {}
+        """
+        tree = self.parse(command)
+        assert len(tree) > 0
