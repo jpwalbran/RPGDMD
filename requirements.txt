@@ -1,8 +1,13 @@
 attrs==22.2.0
+autopep8==2.0.2
+build==0.10.0
 exceptiongroup==1.1.0
 iniconfig==2.0.0
 packaging==23.0
 pluggy==1.0.0
+pycodestyle==2.10.0
+pyproject_hooks==1.0.0
 pytest==7.2.2
+-e git+https://github.com/jpwalbran/RPGDMD.git@56c20fb65b891356efb1e7c8766e5d1018f63f26#egg=RPGDMD
 sly==0.5
 tomli==2.0.1
