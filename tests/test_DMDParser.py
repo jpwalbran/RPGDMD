@@ -1,6 +1,7 @@
 import pytest
-from RPGDMD.DMDParser import DMDParser
 from RPGDMD.DMDLexer import DMDLexer
+from RPGDMD.DMDParser import DMDParser
+
 class TestDMDParser(object):
 
     def setup_class(self):
