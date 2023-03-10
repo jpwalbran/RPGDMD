@@ -1,6 +1,6 @@
-from unittest import TestCase
+import pytest
 
-class TestDMDParser(TestCase):
+class TestDMDParser(object):
 
     def test_always_pass(self):
         assert True
