@@ -80,6 +80,10 @@ class DMDParser(Parser):
     @_('NAME DESCROP rammends')
     def fi(self, p):
         return (p.NAME, p.rammends)
+    
+    @_('empty')
+    def fi(self, p):
+        pass
 
     @_('r')
     def rdef(self, p):
@@ -220,6 +224,10 @@ class DMDParser(Parser):
     @_('HEIGHT')
     def factor(self, p):
         return p.HEIGHT
+    
+    @_('')
+    def empty(self, p):
+        pass
     
     def error(self, p):
         if p:
