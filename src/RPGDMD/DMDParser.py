@@ -80,6 +80,10 @@ class DMDParser(Parser):
     @_('NAME DESCROP rammends')
     def fi(self, p):
         return (p.NAME, p.rammends)
+    
+    @_('empty')
+    def fi(self, p):
+        pass
 
     @_('r')
     def rdef(self, p):
@@ -104,6 +108,14 @@ class DMDParser(Parser):
     @_('featurelist')
     def rammends(self, p):
         return p.featurelist
+    
+    @_('ft')
+    def rammends(self, p):
+        return p.ft
+
+    @_('ft DESCROP descr')
+    def rammends(self, p):
+        return (p.ft, p.descr)
     
     @_('descr')
     def rammends(self, p):
@@ -189,18 +201,26 @@ class DMDParser(Parser):
     def expr(self, p):
         return ('-', p.expr, p.term)
     
+    @_('exp')
+    def term(self, p):
+        return p.exp
+    
+    @_('term TIMES exp')
+    def term(self, p):
+        return ('*', p.term, p.exp)
+    
+    @_('term DIV exp')
+    def term(self, p):
+        return ('/', p.term , p.exp)
+    
+    @_('exp EXP factor')
+    def exp(self, p):
+        return ('^', p.exp, p.factor)
+
     @_('factor')
-    def term(self, p):
+    def exp(self, p):
         return p.factor
-    
-    @_('term TIMES factor')
-    def term(self, p):
-        return ('*', p.term, p.factor)
-    
-    @_('term DIV factor')
-    def term(self, p):
-        return ('/', p.term , p.factor)
-    
+
     @_('LPAREN expr RPAREN')
     def factor(self, p):
         return p.expr
@@ -220,6 +240,10 @@ class DMDParser(Parser):
     @_('HEIGHT')
     def factor(self, p):
         return p.HEIGHT
+    
+    @_('')
+    def empty(self, p):
+        pass
     
     def error(self, p):
         if p:
