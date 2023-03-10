@@ -73,6 +73,16 @@ class TestDMDParser(object):
         tree = self.parse(command)
         assert len(tree) > 0
     
+    def test_floor_with_room_feature_list(self):
+        command = """
+        f1 (R[0 0 30 30])('s' 's'){
+                r1 = [. .]R[15 0 5 10 m:"c"]//"A test room"
+                r1//<('w'C[0 0 5]//"A small pool of water") ('g'R[0 0 10 10])>
+            }
+        """
+        tree = self.parse(command)
+        assert len(tree) > 0
+
     def test_floor_with_two_rooms(self):
         command = """
         f1 (R[0 0 30 30])('s' 's'){
@@ -90,7 +100,6 @@ class TestDMDParser(object):
         """
         tree = self.parse(command)
         assert len(tree) > 0
-    
     
     def test_floor_with_material_definition(self):
         command = """
