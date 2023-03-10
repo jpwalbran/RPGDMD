@@ -1,6 +1,9 @@
 import pytest
 
+from RPGDMD.DMDParser import DMDParser
+from RPGDMD.DMDLexer import DMDLexer
 class TestDMDParser(object):
 
-    def test_always_pass(self):
-        assert True
+    def setup_class(self):
+        self.lexer = DMDLexer()
+        self.parser = DMDParser()

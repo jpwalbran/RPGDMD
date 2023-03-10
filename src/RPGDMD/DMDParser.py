@@ -1,6 +1,6 @@
 from sly import Parser
-from DMDLexer import DMDLexer
-from Material import Material
+from RPGDMD.DMDLexer import DMDLexer
+from RPGDMD.Material import Material
 import pprint
 
 

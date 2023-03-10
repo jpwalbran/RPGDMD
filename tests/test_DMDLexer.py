@@ -1,7 +1,5 @@
 import pytest
 from RPGDMD.DMDLexer import DMDLexer
-
-
 class TestDMDLexer(object):
 
     def setup_class(self):
