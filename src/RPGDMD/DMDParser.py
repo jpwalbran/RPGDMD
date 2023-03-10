@@ -1,6 +1,6 @@
 from sly import Parser
-from DMDLexer import DMDLexer
-from Material import Material
+from RPGDMD.DMDLexer import DMDLexer
+from RPGDMD.Material import Material
 import pprint
 
 
@@ -232,7 +232,11 @@ if __name__ == "__main__":
     lexer = DMDLexer()
     parser = DMDParser()
     pp = pprint.PrettyPrinter(indent=2)
-    with open("testCases/exampleIn.txt") as f:
-        data = f.read()
+    #with open("testCases/exampleIn.txt") as f:
+    #    data = f.read()
+    data = """
+        matdef "goop" 'g'
+        matdef "hammers" 'q'
+    """
     output = parser.parse(lexer.tokenize(data))
     pp.pprint(output)
