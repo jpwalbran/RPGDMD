@@ -109,6 +109,14 @@ class DMDParser(Parser):
     def rammends(self, p):
         return p.featurelist
     
+    @_('ft')
+    def rammends(self, p):
+        return p.ft
+
+    @_('ft DESCROP descr')
+    def rammends(self, p):
+        return (p.ft, p.descr)
+    
     @_('descr')
     def rammends(self, p):
         return p.descr
