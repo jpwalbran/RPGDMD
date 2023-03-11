@@ -261,6 +261,9 @@ if __name__ == "__main__":
     data = """
         matdef "goop" 'g'
         matdef "hammers" 'q'
+        f1 (R[10 10 5 5])('s' 's') {
+            r1 = [. .]C[5 5 10]
+        }
     """
     output = parser.parse(lexer.tokenize(data))
     pp.pprint(output)

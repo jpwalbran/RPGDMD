@@ -8,4 +8,4 @@ class Material(object):
         return self.__str__()
 
     def __str__(self):
-        return f"<MAT>: ({self.name}, '{self.id})'"
+        return f"(<MAT>: ({self.name}, '{self.id})')"
