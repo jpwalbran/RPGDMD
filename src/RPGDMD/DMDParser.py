@@ -1,6 +1,10 @@
 from sly import Parser
 from RPGDMD.DMDLexer import DMDLexer
-from RPGDMD.Material import Material
+from RPGDMD.AST.ASTFloor import ASTFloor
+from RPGDMD.AST.ASTMaterial import ASTMaterial
+from RPGDMD.AST.ASTRammends import ASTRammends
+from RPGDMD.AST.ASTRint import ASTRint
+from RPGDMD.AST.ASTRoom import ASTRoom
 import pprint
 
 
@@ -8,15 +12,6 @@ class DMDParser(Parser):
 
     debugfile = 'parser.out'
     start = 'ts'
-
-    DEFAULT_MATERIALS = [
-        Material('l', 'lava'), 
-        Material('w','water'), 
-        Material('s', 'stone'), 
-        Material('g', 'grass'),
-        Material('d', 'dirt'),
-        Material('v', 'void')
-        ]
 
     tokens = DMDLexer.tokens
 
@@ -35,7 +30,7 @@ class DMDParser(Parser):
     @_('matdeflist matdef')
     def matdeflist(self, p):
         self.new_materials.append(p.matdef)
-        return p.matdeflist, p.matdef 
+        return (p.matdeflist, p.matdef) 
     
     @_('matdef')
     def matdeflist(self, p):
@@ -43,7 +38,7 @@ class DMDParser(Parser):
     
     @_('MATDEF STRING MATERIALID')
     def matdef(self, p):
-        return Material(p.STRING, p.MATERIALID)
+        return ASTMaterial(p.STRING, p.MATERIALID)
     
     @_('fs s')
     def s(self, p):
@@ -63,7 +58,7 @@ class DMDParser(Parser):
     
     @_('NAME LPAREN sopt RPAREN LPAREN MATERIALID MATERIALID RPAREN LCBRACE fi RCBRACE')
     def f(self, p):
-        return (p.NAME, p.sopt, p.MATERIALID0, p.MATERIALID1, p.fi)
+        return ASTFloor(p.NAME, [p.MATERIALID0, p.MATERIALID1], p.sopt, p.fi)
     
     @_('fi rdef')
     def fi(self, p):
@@ -71,7 +66,7 @@ class DMDParser(Parser):
     
     @_('fi NAME DESCROP rammends')
     def fi(self, p):
-        return (p.fi, p.NAME, p.rammends)
+        return (p.fi, ASTRint(p.NAME, p.rammends))
     
     @_('rdef')
     def fi(self, p):
@@ -79,7 +74,7 @@ class DMDParser(Parser):
     
     @_('NAME DESCROP rammends')
     def fi(self, p):
-        return (p.NAME, p.rammends)
+        return ASTRint(p.NAME, p.rammends)
     
     @_('empty')
     def fi(self, p):
@@ -99,23 +94,23 @@ class DMDParser(Parser):
     
     @_('NAME EQ LSBRACE MATERIALID MATERIALID RSBRACE sopt')
     def r(self, p):
-        return (p.NAME, p.MATERIALID0, p.MATERIALID1, p.sopt)
+        return ASTRoom(p.NAME, p.sopt, [p.MATERIALID0, p.MATERIALID1])
     
     @_('featurelist DESCROP descr')
     def rammends(self, p):
-        return (p.featurelist, p.descr)
+        return ASTRammends(p.featurelist, p.descr)
     
     @_('featurelist')
     def rammends(self, p):
-        return p.featurelist
+        return ASTRammends(p.featurelist)
     
     @_('ft')
     def rammends(self, p):
-        return p.ft
+        return ASTRammends(p.ft)
 
     @_('ft DESCROP descr')
     def rammends(self, p):
-        return (p.ft, p.descr)
+        return ASTRammends(p.ft, p.descr)
     
     @_('descr')
     def rammends(self, p):
