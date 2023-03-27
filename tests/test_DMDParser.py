@@ -1,6 +1,7 @@
 import pytest
 from RPGDMD.DMDLexer import DMDLexer
 from RPGDMD.DMDParser import DMDParser
+from RPGDMD.AST import *
 
 class TestDMDParser(object):
 
@@ -17,7 +18,8 @@ class TestDMDParser(object):
             f1 (R[0 0 30 30])('s' 's') {} 
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        print(tree)
+        assert type(tree) == ASTFloor
 
     def test_single_floor_with_simple_room(self):
         command = """
@@ -26,7 +28,7 @@ class TestDMDParser(object):
             }
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == ASTFloor
     
     def test_floor_with_comment(self):
         command = """
@@ -34,7 +36,7 @@ class TestDMDParser(object):
             f1 (R[0 0 0 0]) ('s' 's') {}
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == ASTFloor
 
     def test_single_floor_with_room_with_description(self):
         command = """
@@ -43,7 +45,7 @@ class TestDMDParser(object):
             }
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == ASTFloor
     
     def test_floor_with_room_with_shape_mode(self):
         command = """
@@ -52,7 +54,7 @@ class TestDMDParser(object):
             }
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == ASTFloor
     
     def test_floor_with_room_ammendments(self):
         command = """
@@ -62,7 +64,7 @@ class TestDMDParser(object):
             }
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == ASTFloor
     
     def test_floor_with_room_ammendments_with_descr(self):
         command = """
@@ -72,8 +74,8 @@ class TestDMDParser(object):
             }
         """
         tree = self.parse(command)
-        assert len(tree) > 0
-    
+        assert type(tree) == ASTFloor
+
     def test_floor_with_room_feature_list(self):
         command = """
         f1 (R[0 0 30 30])('s' 's'){
@@ -82,7 +84,7 @@ class TestDMDParser(object):
             }
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == ASTFloor
 
     def test_floor_with_two_rooms(self):
         command = """
@@ -92,7 +94,7 @@ class TestDMDParser(object):
             }
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == ASTFloor
     
     def test_two_empty_floors(self):
         command = """
@@ -100,7 +102,8 @@ class TestDMDParser(object):
         f2 (E[10 4 10 5])('s' 'w') {}
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == list
+        assert len(tree) == 2
     
     def test_floor_with_material_definition(self):
         command = """
@@ -108,7 +111,8 @@ class TestDMDParser(object):
             f1 (R[0 0 30 30])('l' 'l') {}
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == list
+        assert len(tree) == 2
 
     def test_floor_with_two_material_definitions(self):
         command = """
@@ -117,11 +121,11 @@ class TestDMDParser(object):
             f1 (R[0 0 30 30])('l' 'l') {}
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == list
     
     def test_floor_with_expression(self):
         command = """
             f1 (R[4 + 2 3 * 4 7 / 8 4 ^ 2])('s' 's') {}
         """
         tree = self.parse(command)
-        assert len(tree) > 0
+        assert type(tree) == ASTFloor
