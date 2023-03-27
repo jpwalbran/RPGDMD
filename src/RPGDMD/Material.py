@@ -1,3 +1,14 @@
+
+DEFAULT_MATERIALS = [
+    Material('l', 'lava'), 
+    Material('w','water'), 
+    Material('s', 'stone'),
+    Material('g', 'grass'),
+    Material('d', 'dirt'),
+    Material('v', 'void')
+    ]
+
+
 class Material(object):
     """Defines a material as a struct."""
     def __init__(self, name, id):
