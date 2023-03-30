@@ -63,11 +63,11 @@ class TestDMDParser(object):
         floor = self.parse(command)
         assert type(floor) == ASTFloor
         interior = floor.interior
-        assert type(interior) == list
-        assert type(interior[0]) == ASTRoom
-        assert interior[0].name == "r1"
-        assert type(interior[1]) == ASTRammends
-        assert interior[1].description == "A test room"
+        assert type(interior) == ASTRoom
+        assert interior.name == "r1"
+        assert type(interior.amendments) == ASTRammends
+        assert interior.amendments.features == None
+        assert interior.amendments.description == "A test room"
 
     def test_floor_with_room_with_shape_mode(self):
         command = """
@@ -83,9 +83,8 @@ class TestDMDParser(object):
         shape = floor.shape
         assert shape.shape == "R"
         assert shape.params == [0, 0, 30, 30]
-        assert type(floor.interior) == list
-        
-        room = floor.interior[0]
+
+        room = floor.interior
         assert type(room) == ASTRoom
         assert room.name == "r1"
         assert room.mats == ['.', '.']
@@ -93,8 +92,8 @@ class TestDMDParser(object):
         rs = room.shape
         assert rs.shape == "R"
         assert rs.params == [15,0,5,10, "m:", 'c']
-        assert type(floor.interior[1]) == ASTRammends
-        assert floor.interior[1].description == "A test room"
+        assert type(room.amendments) == ASTRammends
+        assert room.amendments.description == "A test room"
 
     def test_floor_with_room_ammendments(self):
         command = """
@@ -114,14 +113,13 @@ class TestDMDParser(object):
         assert shape.params == [0,0,30,30]
         assert type(floor.interior) == list
         interior = floor.interior
-        assert type(interior[0]) == list
-        r1 = interior[0]
-        assert type(r1[0]) == ASTRoom
-        assert type(r1[1]) == ASTRammends
-        assert r1[0].name == "r1"
-        assert r1[1].description == "A test room"
-        assert type(interior[1]) == ASTRint
+        room = interior[0]
+        assert type(room) == ASTRoom
+        assert room.name == "r1"
+        assert room.amendments.description == "A test room"
+
         rint = interior[1]
+        assert type(rint) == ASTRint
         assert rint.name == "r1"
         assert type(rint.rammends) == ASTRammends
         ramds = rint.rammends
@@ -145,9 +143,9 @@ class TestDMDParser(object):
         interior = floor.interior
         assert type(interior) == list
 
-        assert type(interior[0]) == list
-        assert type(interior[0][0]) == ASTRoom
-        assert type(interior[0][1]) == ASTRammends
+        room = interior[0]
+        assert type(room) == ASTRoom
+        assert type(room.amendments) == ASTRammends
 
         assert type(interior[1]) == ASTRint
         rint = interior[1]
@@ -168,7 +166,7 @@ class TestDMDParser(object):
         assert floor.name == "f1"
         assert type(floor.interior) == list
         interior = floor.interior
-        assert type(interior[0]) == list
+        assert type(interior[0]) == ASTRoom
         assert type(interior[1]) == ASTRint
 
         rint = interior[1]

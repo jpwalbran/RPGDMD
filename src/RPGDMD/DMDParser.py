@@ -77,10 +77,10 @@ class DMDParser(Parser):
     def rdef(self, p):
         return p.r
 
-    # Possible tree collapsing here
     @_('r DESCROP rammends')
     def rdef(self, p):
-        return [p.r, p.rammends]
+        p.r.amendments = p.rammends
+        return p.r
 
     @_('LSBRACE MATERIALID MATERIALID RSBRACE sopt')
     def r(self, p):
