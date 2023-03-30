@@ -8,5 +8,5 @@ class ASTRammends(object):
         return self.__str__()
 
     def __str__(self):
-        return f"Ra({self.features}, {self.description})"
+        return f"RAMEND({self.features}, {self.description})"
     

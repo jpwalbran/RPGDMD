@@ -9,4 +9,4 @@ class ASTRoom(object):
         return self.__str__()
 
     def __str__(self):
-        return f"R({self.name}, {self.shape}, {self.mats}, {self.amendments})"
+        return f"ROOM({self.name}, {self.shape}, {self.mats}, {self.amendments})"

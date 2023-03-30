@@ -8,5 +8,5 @@ class ASTRint(object):
         return self.__str__()
 
     def __str__(self):
-        return f"Rint({self.name}, {self.rammends})"
+        return f"RINT({self.name}, {self.rammends})"
     

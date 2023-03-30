@@ -9,4 +9,4 @@ class ASTFloor(object):
         return self.__str__()
 
     def __str__(self):
-        return f"F({self.name}, {self.mats}, {self.shape}, {self.interior})"
+        return f"FLOOR({self.name}, {self.mats}, {self.shape}, {self.interior})"

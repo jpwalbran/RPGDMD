@@ -9,4 +9,4 @@ class ASTBinOP(object):
         return self.__str__()
     
     def __str__(self):
-        return f"BinOp({self.mode}, {self.t1}, {self.t2})"
+        return f"BINOP({self.mode}, {self.t1}, {self.t2})"

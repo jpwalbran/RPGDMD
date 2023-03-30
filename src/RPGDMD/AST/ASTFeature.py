@@ -8,4 +8,4 @@ class ASTFeature(object):
         return self.__str__()
     
     def __str__(self):
-        return f"F({self.mat}, {self.shape}, {self.description})"
+        return f"FEAT({self.mat}, {self.shape}, {self.description})"

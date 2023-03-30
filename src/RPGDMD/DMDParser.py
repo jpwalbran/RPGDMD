@@ -256,10 +256,14 @@ if __name__ == "__main__":
 
         TestFloor (R[0 0 30 30])('s' 's') {
 	        # Make an entryway with a puddle of goop in the middle.
-	        r1 = [. .]R[15 0 5 10 m:"c"]//"A small stone entryway with a puddle of green goop in the middle of the floor."
-	        r1//<('g'C[3 * w / 4 h / 2 2]//"A small circular puddle of green goop.") ('g'C[w / 4 2 * h / 3 1]//"A small circular puddle of green goop.")>
+	        r1 = [. .]R[15 0 5 10 m:"c"]
+                //"A small stone entryway with a puddle of green goop in the middle of the floor."
+	        r1
+                //<('g'C[3 * w / 4 h / 2 2]//"A small circular puddle of green goop.") 
+                ('g'C[w / 4 2 * h / 3 1]//"A small circular puddle of green goop.")>
 	
-	        r2 = [. .]R[10 0 15 15]//\"\"\" 
+	        r2 = [. .]R[10 0 15 15]//
+                \"\"\" 
 		        A room that tests the multiline string literals.
 		        This is mostly to have a test source for regex building.
 		        \"\"\"
@@ -267,13 +271,17 @@ if __name__ == "__main__":
 
         TestFloor2 (C[0 0 15])('s' 's') {
 	        # Make another area
-	        r2 = [. .]R[20 0 5 10]//"A small circular room in the floor."
+	        r2 = [. .]R[20 0 5 10]
+                //"A small circular room in the floor."
         }
         
         TestFloor3 (R[0 0 30 30])('s' 's') {
             # Make an entryway with a puddle of goop in the middle.
-	        r1 = [. .]R[15 0 5 10 m:"c"]//"A small stone entryway with a puddle of green goop in the middle of the floor."
-	        r1//<('g'C[3 * w / 4 h / 2 2]//"A small circular puddle of green goop.") ('g'C[w / 4 2 * h / 3 1]//"A small circular puddle of green goop.")>
+	        r1 = [. .]R[15 0 5 10 m:"c"]
+                //"A small stone entryway with a puddle of green goop in the middle of the floor."
+	        r1//
+            <('g'C[3 * w / 4 h / 2 2]//"A small circular puddle of green goop.") 
+            ('g'C[w / 4 2 * h / 3 1]//"A small circular puddle of green goop.")>
         }
         """
 
@@ -281,9 +289,4 @@ if __name__ == "__main__":
 
     ol = collapse(output)
     for i in ol:
-        print(type(i))
         print(i)
-        if isinstance(i, ASTFloor):
-            for j in collapse(i.interior):
-                print(type(j))
-                print(j)
