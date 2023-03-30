@@ -7,7 +7,8 @@ import pprint
 
 class DMDParser(Parser):
 
-    debugfile = 'parser.out'
+    #Sets the builtin debug file output
+    #debugfile = 'parser.out'
     start = 'ts'
 
     tokens = DMDLexer.tokens
@@ -276,14 +277,7 @@ if __name__ == "__main__":
         }
         """
 
-    data2 = """
-        f1 (R[0 0 30 30])('s' 's'){
-                r1 = [. .]R[15 0 5 10 m:"c"]//"A test room"
-                r1//<('w'C[0 0 5]//"A small pool of water") ('g'R[0 0 10 10])>
-            }
-    """
-
-    output = parser.parse(lexer.tokenize(data2))
+    output = parser.parse(lexer.tokenize(data))
 
     ol = collapse(output)
     for i in ol:
