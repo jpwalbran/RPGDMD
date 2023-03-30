@@ -4,7 +4,6 @@ class ASTFloor(object):
         self.mats = mats
         self.shape = shape
         self.interior = interior
-    
 
     def __repr__(self):
         return self.__str__()

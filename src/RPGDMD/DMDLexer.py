@@ -40,8 +40,7 @@ class DMDLexer(Lexer):
 
     # Shape definitions come at the top
     SHAPE = r'[RCELP]{1}'
-    MATERIALID = r'\'[A-Za-z]{1}\'|\.{1}'
-
+    
     # Handle the mode parameters
     MODEPARAM = r'[A-Za-z]+:'
 
@@ -55,10 +54,6 @@ class DMDLexer(Lexer):
 
     FEATOPT = r'[DHS-]{1}'
 
-    # Handle String literals
-    MULTILINESTRING = r'\"\"\"(.|\n)*\"\"\"'
-    STRING = r'\"[^\"]*\"'
-    
     # Curly brackets
     LCBRACE = r'\{'
     RCBRACE = r'\}'
@@ -81,6 +76,25 @@ class DMDLexer(Lexer):
     DIV = r'\/'
     EXP = r'\^'
     EQ = r'='
+
+    # Strip quotes out of materialids and strings
+    @_(r'\'[A-Za-z]{1}\'|\.{1}')
+    def MATERIALID(self, t):
+        if t.value == '.':
+            t.value = '.'
+        else:
+            t.value = t.value[1:-1] # Remove the first and last characters, which are always quotes
+        return t
+
+    @_(r'\"\"\"(.|\n)*\"\"\"')
+    def MULTILINESTRING(self, t):
+        t.value = t.value[3:-3] # Remove the first and last three characters from the literal, being the quotes
+        return t
+    
+    @_(r'\"[^\"]*\"')
+    def STRING(self, t):
+        t.value = t.value[1:-1] # Remove the first and last characters, which are always quotes
+        return t
 
     # Convert all numbers to ints
     @_(r'[0-9]+')

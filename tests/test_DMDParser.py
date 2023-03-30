@@ -3,23 +3,29 @@ from RPGDMD.DMDLexer import DMDLexer
 from RPGDMD.DMDParser import DMDParser
 from RPGDMD.AST import *
 
+
 class TestDMDParser(object):
 
     def setup_class(self):
         self.lexer = DMDLexer()
         self.parser = DMDParser()
-    
+
     def parse(self, command):
         tokens = self.lexer.tokenize(command)
         return self.parser.parse(tokens)
-    
+
     def test_single_empty_floor(self):
         command = """
             f1 (R[0 0 30 30])('s' 's') {} 
         """
-        tree = self.parse(command)
-        print(tree)
-        assert type(tree) == ASTFloor
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+
+        assert floor.name == "f1"
+        assert floor.mats == ['s', 's']
+        s = floor.shape
+        assert s.shape == "R"
+        assert s.params == [0, 0, 30, 30]
 
     def test_single_floor_with_simple_room(self):
         command = """
@@ -27,16 +33,26 @@ class TestDMDParser(object):
                 r1 = [. .]R[15 0 5 10]
             }
         """
-        tree = self.parse(command)
-        assert type(tree) == ASTFloor
-    
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+        interior = floor.interior
+        assert type(interior) == ASTRoom
+        assert interior.name == "r1"
+        assert interior.mats == ['.', '.']
+        assert interior.shape.shape == "R"
+        assert interior.shape.params == [15, 0, 5, 10]
+
     def test_floor_with_comment(self):
         command = """
             # This is a comment
             f1 (R[0 0 0 0]) ('s' 's') {}
         """
-        tree = self.parse(command)
-        assert type(tree) == ASTFloor
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+        assert floor.name == "f1"
+        assert floor.mats == ['s', 's']
+        assert floor.shape.shape == "R"
+        assert floor.shape.params == [0, 0, 0, 0]
 
     def test_single_floor_with_room_with_description(self):
         command = """
@@ -44,18 +60,42 @@ class TestDMDParser(object):
                 r1 = [. .]R[15 0 5 10]//"A test room"
             }
         """
-        tree = self.parse(command)
-        assert type(tree) == ASTFloor
-    
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+        interior = floor.interior
+        assert type(interior) == list
+        assert type(interior[0]) == ASTRoom
+        assert interior[0].name == "r1"
+        assert type(interior[1]) == ASTRammends
+        assert interior[1].description == "A test room"
+
     def test_floor_with_room_with_shape_mode(self):
         command = """
         f1 (R[0 0 30 30])('s' 's'){
                 r1 = [. .]R[15 0 5 10 m:"c"]//"A test room"
             }
         """
-        tree = self.parse(command)
-        assert type(tree) == ASTFloor
-    
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+
+        assert floor.mats == ['s','s']
+        assert type(floor.shape) == ASTShape
+        shape = floor.shape
+        assert shape.shape == "R"
+        assert shape.params == [0, 0, 30, 30]
+        assert type(floor.interior) == list
+        
+        room = floor.interior[0]
+        assert type(room) == ASTRoom
+        assert room.name == "r1"
+        assert room.mats == ['.', '.']
+        assert type(room.shape) == ASTShape
+        rs = room.shape
+        assert rs.shape == "R"
+        assert rs.params == [15,0,5,10, "m:", 'c']
+        assert type(floor.interior[1]) == ASTRammends
+        assert floor.interior[1].description == "A test room"
+
     def test_floor_with_room_ammendments(self):
         command = """
         f1 (R[0 0 30 30])('s' 's'){
@@ -63,9 +103,33 @@ class TestDMDParser(object):
                 r1//('w'C[0 0 5])
             }
         """
-        tree = self.parse(command)
-        assert type(tree) == ASTFloor
-    
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+
+        assert floor.name == "f1"
+        assert floor.mats == ['s','s']
+        assert type(floor.shape) == ASTShape
+        shape = floor.shape
+        assert shape.shape == "R"
+        assert shape.params == [0,0,30,30]
+        assert type(floor.interior) == list
+        interior = floor.interior
+        assert type(interior[0]) == list
+        r1 = interior[0]
+        assert type(r1[0]) == ASTRoom
+        assert type(r1[1]) == ASTRammends
+        assert r1[0].name == "r1"
+        assert r1[1].description == "A test room"
+        assert type(interior[1]) == ASTRint
+        rint = interior[1]
+        assert rint.name == "r1"
+        assert type(rint.rammends) == ASTRammends
+        ramds = rint.rammends
+        assert type(ramds.features) == ASTFeature
+        feat = ramds.features
+        assert feat.mat == "w"
+        assert type(feat.shape) == ASTShape
+
     def test_floor_with_room_ammendments_with_descr(self):
         command = """
         f1 (R[0 0 30 30])('s' 's'){
@@ -73,8 +137,24 @@ class TestDMDParser(object):
                 r1//('w'C[0 0 5])//"A small pool of water"
             }
         """
-        tree = self.parse(command)
-        assert type(tree) == ASTFloor
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+
+        assert floor.name == "f1"
+
+        interior = floor.interior
+        assert type(interior) == list
+
+        assert type(interior[0]) == list
+        assert type(interior[0][0]) == ASTRoom
+        assert type(interior[0][1]) == ASTRammends
+
+        assert type(interior[1]) == ASTRint
+        rint = interior[1]
+        assert rint.name == "r1"
+        assert type(rint.rammends.features) == ASTFeature
+        assert rint.rammends.description == "A small pool of water"
+
 
     def test_floor_with_room_feature_list(self):
         command = """
@@ -83,8 +163,23 @@ class TestDMDParser(object):
                 r1//<('w'C[0 0 5]//"A small pool of water") ('g'R[0 0 10 10])>
             }
         """
-        tree = self.parse(command)
-        assert type(tree) == ASTFloor
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+        assert floor.name == "f1"
+        assert type(floor.interior) == list
+        interior = floor.interior
+        assert type(interior[0]) == list
+        assert type(interior[1]) == ASTRint
+
+        rint = interior[1]
+
+        assert rint.name == "r1"
+        assert type(rint.rammends) == ASTRammends
+        ramds = rint.rammends
+        assert type(ramds.features) == list
+        for feat in ramds.features:
+            assert type(feat) == ASTFeature
+
 
     def test_floor_with_two_rooms(self):
         command = """
@@ -93,9 +188,15 @@ class TestDMDParser(object):
                 r2 = ['w' 's']C[10 5 10]
             }
         """
-        tree = self.parse(command)
-        assert type(tree) == ASTFloor
-    
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+
+        interior = floor.interior
+
+        assert type(interior) == list
+        assert type(interior[0]) == ASTRoom
+        assert type(interior[1]) == ASTRoom
+
     def test_two_empty_floors(self):
         command = """
         f1 (R[0 0 30 30])('s' 's') {}
@@ -104,7 +205,13 @@ class TestDMDParser(object):
         tree = self.parse(command)
         assert type(tree) == list
         assert len(tree) == 2
-    
+
+        assert type(tree[0]) == ASTFloor
+        assert type(tree[1]) == ASTFloor
+
+        assert tree[0].name == "f1"
+        assert tree[1].name == "f2"
+
     def test_floor_with_material_definition(self):
         command = """
             matdef "goop" 'g'
@@ -113,6 +220,10 @@ class TestDMDParser(object):
         tree = self.parse(command)
         assert type(tree) == list
         assert len(tree) == 2
+        assert type(tree[0]) == ASTMaterial
+        assert tree[0].name == "goop"
+        assert tree[0].id == 'g'
+        assert type(tree[1]) == ASTFloor
 
     def test_floor_with_two_material_definitions(self):
         command = """
@@ -122,10 +233,44 @@ class TestDMDParser(object):
         """
         tree = self.parse(command)
         assert type(tree) == list
-    
-    def test_floor_with_expression(self):
+        assert type(tree[0]) == list
+
+        mats = tree[0]
+        assert mats[0].name == "goop"
+        assert mats[0].id == 'g'
+        
+        assert type(mats[1]) == ASTMaterial
+        assert mats[1].name == "frog legs"
+        assert mats[1].id == 'f'
+
+    def test_floor_with_simple_expressions(self):
         command = """
             f1 (R[4 + 2 3 * 4 7 / 8 4 ^ 2])('s' 's') {}
         """
-        tree = self.parse(command)
-        assert type(tree) == ASTFloor
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+        assert floor.name == "f1"
+        assert floor.mats == ['s', 's']
+
+        assert type(floor.shape) == ASTShape
+        shape = floor.shape
+        assert shape.shape == "R"
+
+        for i in shape.params:
+            assert type(i) == ASTBinOP
+
+        assert shape.params[0].mode == "+"
+        assert shape.params[0].t1 == 4
+        assert shape.params[0].t2 == 2
+
+        assert shape.params[1].mode == "*"
+        assert shape.params[1].t1 == 3
+        assert shape.params[1].t2 == 4
+
+        assert shape.params[2].mode == "/"
+        assert shape.params[2].t1 == 7
+        assert shape.params[2].t2 == 8
+
+        assert shape.params[3].mode == "^"
+        assert shape.params[3].t1 == 4
+        assert shape.params[3].t2 == 2

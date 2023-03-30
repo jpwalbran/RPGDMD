@@ -4,6 +4,7 @@ from RPGDMD.DMDLexer import DMDLexer
 from RPGDMD.AST import *
 import pprint
 
+
 class DMDParser(Parser):
 
     debugfile = 'parser.out'
@@ -75,6 +76,7 @@ class DMDParser(Parser):
     def rdef(self, p):
         return p.r
 
+    # Possible tree collapsing here
     @_('r DESCROP rammends')
     def rdef(self, p):
         return [p.r, p.rammends]
@@ -105,7 +107,7 @@ class DMDParser(Parser):
 
     @_('descr')
     def rammends(self, p):
-        return p.descr
+        return ASTRammends(None, description=p.descr)
 
     @_('LNGBRACE fl RNGBRACE')
     def featurelist(self, p):
@@ -125,27 +127,28 @@ class DMDParser(Parser):
 
     @_('LPAREN feature DESCROP descr RPAREN')
     def ft(self, p):
-        return [p.feature, p.descr]
+        p.feature.description = p.descr
+        return p.feature
 
     @_('"D" paramlist')
     def feature(self, p):
-        return ("D", p.paramlist)
+        return ASTDoor(p.paramlist)
 
     @_('MATERIALID sopt')
     def feature(self, p):
-        return [p.MATERIALID, p.sopt]
+        return ASTFeature(p.MATERIALID, p.sopt)
 
     @_('sopt')
     def feature(self, p):
-        return p.sopt
+        return ASTFeature("", p.sopt)
 
     @_('FEATOPT LSBRACE sopt RSBRACE')
     def feature(self, p):
-        return [p.FEATOPT, p.sopt]
+        return ASTFeature(p.FEATOPT, p.sopt)
 
     @_('SHAPE paramlist')
     def sopt(self, p):
-        return [p.SHAPE, p.paramlist]
+        return ASTShape(p.SHAPE, p.paramlist)
 
     @_('STRING')
     def descr(self, p):
@@ -157,11 +160,11 @@ class DMDParser(Parser):
 
     @_('LSBRACE pl RSBRACE')
     def paramlist(self, p):
-        return p.pl
+        return list(collapse(p.pl))
 
     @_('pl param')
     def pl(self, p):
-        return [p.pl, p.param]
+        return list(collapse([p.pl, p.param]))
 
     @_('param')
     def pl(self, p):
@@ -272,8 +275,16 @@ if __name__ == "__main__":
 	        r1//<('g'C[3 * w / 4 h / 2 2]//"A small circular puddle of green goop.") ('g'C[w / 4 2 * h / 3 1]//"A small circular puddle of green goop.")>
         }
         """
-    output = parser.parse(lexer.tokenize(data))
-    print(type(output))
+
+    data2 = """
+        f1 (R[0 0 30 30])('s' 's'){
+                r1 = [. .]R[15 0 5 10 m:"c"]//"A test room"
+                r1//<('w'C[0 0 5]//"A small pool of water") ('g'R[0 0 10 10])>
+            }
+    """
+
+    output = parser.parse(lexer.tokenize(data2))
+
     ol = collapse(output)
     for i in ol:
         print(type(i))
@@ -282,4 +293,3 @@ if __name__ == "__main__":
             for j in collapse(i.interior):
                 print(type(j))
                 print(j)
-    
