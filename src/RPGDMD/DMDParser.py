@@ -7,6 +7,12 @@ import pprint
 
 class DMDParser(Parser):
 
+    precedence = (
+        ('left', PLUS, MINUS),
+        ('left', TIMES, DIV),
+        ('right', UMINUS)
+    )
+
     #Sets the builtin debug file output
     #debugfile = 'parser.out'
     start = 'ts'
@@ -41,13 +47,13 @@ class DMDParser(Parser):
     def s(self, p):
         return p.fs
 
-    @_('fs f')
-    def fs(self, p):
-        return [p.fs, p.f]
-
     @_('f')
     def fs(self, p):
         return p.f
+
+    @_('fs f')
+    def fs(self, p):
+        return [p.fs, p.f]
 
     @_('NAME LPAREN sopt RPAREN LPAREN MATERIALID MATERIALID RPAREN LCBRACE fi RCBRACE')
     def f(self, p):
@@ -211,13 +217,13 @@ class DMDParser(Parser):
     def exp(self, p):
         return p.factor
 
+    @_('MINUS factor %prec UMINUS')
+    def factor(self, p):
+        return ASTBinOP('-', p.factor)
+
     @_('LPAREN expr RPAREN')
     def factor(self, p):
         return p.expr
-
-    @_('MINUS factor')
-    def factor(self, p):
-        return ASTBinOP('-', p.factor)
 
     @_('NUMBER')
     def factor(self, p):
@@ -247,8 +253,7 @@ if __name__ == "__main__":
     lexer = DMDLexer()
     parser = DMDParser()
     pp = pprint.PrettyPrinter(indent=2)
-    # with open("testCases/exampleIn.txt") as f:
-    #    data = f.read()
+
     data = """
         matdef "Goop" 'g'
         matdef "Hammers" 'h'
@@ -284,8 +289,12 @@ if __name__ == "__main__":
             ('g'C[w / 4 2 * h / 3 1]//"A small circular puddle of green goop.")>
         }
         """
+    data2 = """
+            f1 (R[2 - 5])('s' 's') {}
+        """
 
-    output = parser.parse(lexer.tokenize(data))
+
+    output = parser.parse(lexer.tokenize(data2))
 
     ol = collapse(output)
     for i in ol:

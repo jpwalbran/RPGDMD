@@ -272,3 +272,24 @@ class TestDMDParser(object):
         assert shape.params[3].mode == "^"
         assert shape.params[3].t1 == 4
         assert shape.params[3].t2 == 2
+    
+    def test_order_of_operations_precedence(self):
+        command = """
+            f1 (R[3 + 4 * 7 / 8 ^ (2 - 7)])('s' 's') {}
+        """
+        #Expected execution order
+        #(2 - 7)
+        #8 ^ (...)
+        #4 * 7
+        #(4 * 7) / (8 ^ (...))
+        #3 + (...)
+
+        floor = self.parse(command)
+        assert type(floor) == ASTFloor
+        
+        params = floor.shape.params
+        assert type(params) == list
+        param = params[0]
+        assert type(param) == ASTBinOP
+        assert type(param.t1) == int
+        assert type(param.t2) == ASTBinOP

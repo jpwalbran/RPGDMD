@@ -45,14 +45,14 @@ class DMDLexer(Lexer):
     MODEPARAM = r'[A-Za-z]+:'
 
     # Handle names/identifiers
-    NAME = r'[A-Za-z_-]+[A-Za-z0-9_-]*'
+    NAME = r'[A-Za-z_]+[A-Za-z0-9_]*'
     NAME['matdef'] = MATDEF
     NAME['w'] = WIDTH
     NAME['h'] = HEIGHT
      
     DESCROP = r'\/\/'
 
-    FEATOPT = r'[DHS-]{1}'
+    FEATOPT = r'[DHS~]{1}'
 
     # Curly brackets
     LCBRACE = r'\{'
@@ -71,8 +71,8 @@ class DMDLexer(Lexer):
     RNGBRACE = r'\>'
     
     PLUS = r'\+'
-    MINUS = r'\-'
     TIMES = r'\*'
+    MINUS = r'\-'
     DIV = r'\/'
     EXP = r'\^'
     EQ = r'='
@@ -113,8 +113,9 @@ class DMDLexer(Lexer):
         self.index += 1
 
 if __name__ == '__main__':
-    with open("exampleIn.txt") as f:
-        data = f.read()
+    data = """
+            f1 (R[2 - 5])('s' 's') {}
+    """
     lexer = DMDLexer()
     for tok in lexer.tokenize(data):
         print(tok)

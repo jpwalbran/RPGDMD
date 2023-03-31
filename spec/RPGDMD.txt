@@ -86,7 +86,7 @@ Room Features: (probably an incomplete list) These are materials or other struct
 
 	'H' : denotes a ladder up or down, goes between layers, needs a connector reference
 
-	'-' : refers to stairs up or down, goes between layers, needs a connector reference.
+	'~' : refers to stairs up or down, goes between layers, needs a connector reference.
 
 Connecting Floors:
 Two floors can be connected in a few ways:
