@@ -286,15 +286,10 @@ if __name__ == "__main__":
                 //"A small stone entryway with a puddle of green goop in the middle of the floor."
 	        r1//
             <('g'C[3 * w / 4 h / 2 2]//"A small circular puddle of green goop.") 
-            ('g'C[w / 4 2 * h / 3 1]//"A small circular puddle of green goop.")>
+            (~[C[w / 4 2 * h / 3 1]]//"A spiral staircase leading downwards.")>
         }
         """
-    data2 = """
-            f1 (R[2 - 5])('s' 's') {}
-        """
-
-
-    output = parser.parse(lexer.tokenize(data2))
+    output = parser.parse(lexer.tokenize(data))
 
     ol = collapse(output)
     for i in ol:
