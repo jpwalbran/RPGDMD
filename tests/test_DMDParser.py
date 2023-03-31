@@ -292,4 +292,26 @@ class TestDMDParser(object):
         param = params[0]
         assert type(param) == ASTBinOP
         assert type(param.t1) == int
+        assert param.t1 == 3
+
         assert type(param.t2) == ASTBinOP
+        assert param.t2.mode == "/"
+
+        assert type(param.t2.t1) == ASTBinOP
+        assert param.t2.t1.mode == "*"
+
+        assert param.t2.t1.t1 == 4
+        assert param.t2.t1.t2 == 7
+
+        assert type(param.t2.t2) == ASTBinOP
+        assert param.t2.t2.mode == "^"
+
+        assert type(param.t2.t2.t1) == int
+        assert param.t2.t2.t1 == 8
+
+        assert type(param.t2.t2.t2) == ASTBinOP
+        assert param.t2.t2.t2.mode == "-"
+        assert type(param.t2.t2.t2.t1) == int
+        assert param.t2.t2.t2.t1 == 2
+        assert type(param.t2.t2.t2.t2) == int
+        assert param.t2.t2.t2.t2 == 7
